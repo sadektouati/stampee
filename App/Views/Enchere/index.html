@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{donnees.titre}}{% endblock %}
+
+{% block body %}
+
+<main>
+<h1>{{donnees.titre}}</h1>
+
+<section class="grille">
+    {% for enchere in encheres %}
+        <article>
+           <span class="{{ enchere.a_coup_de_coeur_lord ? 'coup-coeur' : '' }}"></span>
+           <img src="/images/{{enchere.fichier}}" alt="{{enchere.titre}}">
+           <div>
+              <h3>{{enchere.titre}}</h3>
+              <span>
+                Est. 400 - 500 cad
+              </span>
+              <span>en cours {{ enchere.offre_actuel ? enchere.offre_actuel : '--' }} cad</span>
+              <p>
+                {{enchere.commentaire}}
+              </p>
+              <footer>
+                <a href="/enchere/details/{{enchere.id}}" class="cta-secondaire">détails</a>
+             </footer>
+           </div>
+        </article>
+        {% endfor %}
+    </section>
+
+<article>
+    <footer>
+        <a href="/enchere/nouveau" class="cta-secondaire">ajouter enchére</a>
+    </footer>
+</article>
+</main>
+
+{% endblock %}

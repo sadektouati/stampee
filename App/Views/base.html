@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zxx">
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@300;600&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="/style.css">
+      <title>{% block title %}{% endblock %}</title>
+    </head>
+   <body>
+</head>
+<body>
+    <header>
+        <nav>
+           <a href="/" class="button logo">Stampee</a>
+           <a href="/catalogue/index">catalogue</a>
+           <a href="#">aide!</a>
+        </nav>
+        <nav>    
+           <a href="/profile/index" class="button compte">profile</a>
+           <a href="/favoris/index" class="button favoris">favoris</a>
+           <a href="/enchere/index" class="button notifications">mes enchéres</a>
+        </nav>
+        <form class="recherche" action="/catalogue/index">
+           <input type="text" name="recherche" placeholder="rechercher timbre">
+           <input type="submit" value="">
+        </form>
+     </header>
+     
+    {% block body %}
+    {% endblock %}
+
+    <footer>
+        <div>
+           <a href="#">Angalais</a> <a href="#">Allemand</a> <a href="#">Arabe</a>
+        </div>
+        <div>
+           <a href="" class="facebook sociaux button"></a>
+           <a href="" class="instagram sociaux button"></a>
+           <a href="" class="twitter sociaux button"></a>
+        </div>
+        <div>
+           <p>
+              <a href="#">Devenir membre</a>
+              <a href="#">À propos de Lord Stampee</a>
+              <a href="#">Fonctionnement de la plateforme</a>
+           </p>
+           <p>
+              <a href="#">Contactez-nous</a>
+              <a href="#">Termes d'utilisation</a>
+              <a href="#">Conditions d'utilisation</a>
+           </p>
+        </div>
+        <p>
+           &copy; tous droit Lorem ipsum dolor sit amet.
+        </p>
+     </footer>
+</body>
+</html>

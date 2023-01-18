@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+ 
+<main>
+   <header class="filtreHeader">
+      <input type="checkbox" id="filtre" class="filtre-button">
+      <div>
+         <span>
+            <select>
+               <option selected>tri</option>
+               <option>prix</option>
+            </select>
+            <label for="filtre" class="filtre button"></label>
+         </span>
+      </div>
+      <div>
+         <span>
+         <input type="checkbox" id="englnd">
+         <label for="englnd">Anglettere</label>
+         <input type="checkbox" id="cnd" checked>
+         <label for="cnd">Canada</label>
+         <input type="checkbox" id="usa">
+         <label for="usa">USA</label>
+         <input type="checkbox" id="austrl">
+         <label for="austrl">Australie</label>
+         </span>
+         <span>
+         <input type="radio" name="type" id="ts" checked>
+         <label for="ts">Tous</label>
+         <input type="radio" name="type" id="pss">
+         <label for="pss">Passés</label>
+         <input type="radio" name="type" id="encrs">
+         <label for="encrs">En cours</label>
+         </span>
+      </div>
+      <h4>128 encheres depuis jan. 2021</h4>
+   </header>
+   <section class="grille">
+      <article>
+         <span class="coup-coeur"></span>
+         <img src="/images/stamp-1.png" alt="un timbre rare">
+         <div>
+            <h3>
+               US civil war
+            </h3>
+            <span>
+            Est. 400 - 500 cad
+            </span>
+            <span>
+            en cours 425 cad
+            </span>
+            <p>
+               Porro saepe excepturi hic, inventore mollitia praesentium minus veritatis delectus at asperiores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
+            </p>
+            <footer>
+               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
+            </footer>
+         </div>
+      </article>
+      <article>
+         <img src="/images/stamp-2.png" alt="un timbre">
+         <div>
+            <h3>
+               Fiction (Bermuda )
+            </h3>
+            <span>
+            Est. 1 000 - 1 500 cad
+            </span>
+            <span class="not-yet">
+            dans 15 jours
+            </span>
+            <p>
+               Porro saepe excepturi hic, inventore mollitia praesentium minus veritatis delectus at asperiores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
+            </p>
+            <footer>
+               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
+            </footer>
+         </div>
+      </article>
+      <article class="archive">
+         <img src="/images/stamp-3.png" alt="un timbre d'algerie">
+         <div>
+            <h3>
+               Wild life
+            </h3>
+            <span>
+            Est. 20 - 50 cad
+            </span>
+            <span class="sold">
+            venudu à 72 cad
+            </span>
+            <p class="sold-label">
+               Vendu / archivé
+            </p>
+            <footer>
+               <a href="/fiche/index/1" class="cta-secondaire">voir</a>
+            </footer>
+         </div>
+      </article>
+      <article>
+         <img src="/images/stamp-4.png" alt="un timbre espagne">
+         <div>
+            <h3>
+               Progressive century
+            </h3>
+            <span>
+            Est. 200 - 800 cad
+            </span>
+            <span  class="not-yet">
+            dans 3 jours
+            </span>
+            <p>
+               Pinventore mollitia praesentium minus veritatis dele asperiores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
+            </p>
+            <footer>
+               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
+            </footer>
+         </div>
+      </article>
+      <article>
+         <img src="/images/stamp-5.png" alt="un timbre UK">
+         <div>
+            <h3>
+               Good luck
+            </h3>
+            <span>
+            Est. 180 - 600 cad
+            </span>
+            <span>
+            en cours 180 cad
+            </span>
+            <p>
+               Porro saepe excepturi hic, inventore mollitia praesentium minus veritatis delectus at asperiores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
+            </p>
+            <footer>
+               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
+            </footer>
+         </div>
+      </article>
+      <article>
+         <img src="/images/stamp-6.png" alt="un timbre rare">
+         <div>
+            <h3>
+               Officially
+            </h3>
+            <span>
+            Est. 300 - 500 cad
+            </span>
+            <span  class="not-yet">
+            dans 3 jours
+            </span>
+            <p>
+               Veritatis delectus at asperiores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
+            </p>
+            <footer>
+               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
+            </footer>
+         </div>
+      </article>
+      <article>
+         <img src="/images/stamp-7.png" alt="un timbre simple">
+         <div>
+            <h3>
+               Bloody marry
+            </h3>
+            <span>
+            Est. 800 - 1 900 cad
+            </span>
+            <span>
+            en cours 1 745 cad
+            </span>
+            <p>
+               praesentium minus veritatis delectus at as Porro saepe excepturi hic, inventore mollitia periores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
+            </p>
+            <footer>
+               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
+            </footer>
+         </div>
+      </article>
+      <article>
+         <img src="/images/stamp-1.png" alt="un timbre">
+         <div>
+            <h3>
+               China 1970
+            </h3>
+            <span>
+            Est. 2 000 - 15 000 cad
+            </span>
+            <span>
+            en cours 13 650 cad
+            </span>
+            <p>
+               mollitia praesentium minus veritatis delectus at asperiores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
+            </p>
+            <footer>
+               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
+            </footer>
+         </div>
+      </article>
+      <article>
+         <img src="/images/stamp-2.png" alt="un timbre collection">
+         <div>
+            <h3>
+               Millinium
+            </h3>
+            <span>
+            Est. 18 - 25 cad
+            </span>
+            <span>
+            en moins de 10 min
+            </span>
+            <p>
+               invenus at asperiores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
+            </p>
+            <footer>
+               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
+            </footer>
+         </div>
+      </article>
+      <label class="cta-secondaire">afficher plus</label>
+   </section>
+</main>
+<article>
+   <h2>Comment ca marche</h2>
+   <section>
+      <p>
+         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto nulla deserunt quas veniam explicabo, eos magni eum hic suscipit, esse ea molestias inventore eius? Quisquam fuga exercitationem iste earum, tempora cumque a. Repellendus optio quidem itaque unde soluta inventore, doloribus ullam fuga nostrum nemo ad, maxime sit, voluptatibus officia tempore.
+      </p>
+      <p>
+         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto nulla deserunt quas veniam explicabo, eos magni eum hic suscipit, esse ea molestias inventore eius? Quisquam fuga exercitationem iste earum, tempora cumque a. Repellendus optio quidem itaque unde soluta inventore, doloribus ullam fuga nostrum nemo ad, maxime sit, voluptatibus officia tempore.
+      </p>
+   </section>
+</article>
+
+{% endblock %}

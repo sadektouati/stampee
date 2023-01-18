@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{{ donnees.titre }}{% endblock %}
+
+{% block body %}
+
+<main>
+    <h1>{{ donnees.titre }}</h1>
+    <form method="post" class="form {{ donnees.formclass }}">
+        <div class="deconnecter">
+            <a href="/profile/deconnecter">déconnecter</a>
+        </div>
+
+        <fieldset class="controles">
+            <label>Votre nom</label>
+            <input type="text" name="nom" value="{{ original.nom }}" placeholder="un pseudo de ton choix ici"  class="{{ required.nom ? 'requi' : (error.nom ? 'erreur' : '') }}">
+            <label class="message-requi">{{ required.nom }}</label>
+            <label class="message-erreur">{{ error.nom }}</label>
+        </fieldset>
+    
+        <fieldset class="controles">
+            <label>Votre courriel</label>
+            <input type="text" name="courriel" value="{{ original.courriel }}" placeholder="votre courriel ici"  class="{{ required.courriel ? 'requi' : (error.courriel ? 'erreur' : '') }}">
+            <label class="message-requi">{{ required.courriel }}</label>
+            <label class="message-erreur">{{ error.courriel }}</label>
+        </fieldset>
+
+        <fieldset class="controles formulaire-seulement">
+            <label>Mot de passe</label>
+            <input type="password" name="mot_de_passe" value="{{ original.mot_de_passe }}" placeholder="chosissez un mot de passe"  class="{{ required.mot_de_passe ? 'requi' : (error.mot_de_passe ? 'erreur' : '') }}">
+            <label class="message-requi">{{ required.mot_de_passe }}</label>
+            <label class="message-erreur">{{ error.mot_de_passe }}</label>
+        </fieldset>
+
+        <fieldset class="controles formulaire-seulement">
+            <label>Retaper votre mot de passe</label>
+            <input type="password" name="confirmation" value="{{ original.confirmation }}" placeholder="retaper votre mot de passe"  class="{{ required.confirmation ? 'requi' : (error.confirmation ? 'erreur' : '') }}">
+            <label class="message-requi">{{ required.confirmation }}</label>
+            <label class="message-erreur">{{ error.confirmation }}</label>
+        </fieldset>
+
+        <fieldset class="controles formulaire-seulement">
+                <button class="main-action">créer compte</button>
+                <a href="/" class="secondary-action">accueil</a>
+        </fieldset>
+    </form>
+
+    <div class="mettre-ajour">
+        <a href="/profile/modifier">modifier</a>
+    </div>
+
+    <!-- <form action="" method="post" class="form">
+
+        <fieldset class="controles">
+            <button class="main-action" disabled>principal</button>
+            <button class="secondary-action" disabled>secondaire</button>
+        </fieldset> -->
+
+    </form>
+</main>
+{% endblock %}

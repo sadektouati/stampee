@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}{{ donnees.titre }}{% endblock %}
+
+{% block body %}
+
+<main>
+    <h1>{{ donnees.titre }}</h1>
+    <form method="post" class="form {{ donnees.formclass }}" {{ donnees.formclass ? 'spellcheck="false"' : '' }}>
+
+        <input type="hidden" name="id" value="{{original.id}}">
+
+        <fieldset class="controles">
+            <label>Titre</label>
+            <input type="text" name="titre" value="{{ original.titre }}" placeholder="titre descriptif" class="{{ required.titre ? 'requi' : (error.titre ? 'erreur' : '') }}">
+            <label class="message-requi">{{ required.titre }}</label>
+            <label class="message-erreur">{{ error.titre }}</label>
+        </fieldset>
+
+        <fieldset class="controles">
+            <label>Commentaire</label>
+            <div class="textarea {{ required.commentaire ? 'requi' : (error.commentaire ? 'erreur' : '') }}">{{ original.commentaire }}
+            </div>
+            <textarea name="commentaire" placeholder="un comentaire explicatif..." class="{{ required.commentaire ? 'requi' : (error.commentaire ? 'erreur' : '') }}" rows="5">{{ original.commentaire }}</textarea>
+            <label class="message-requi">{{ required.commentaire }}</label>
+            <label class="message-erreur">{{ error.commentaire }}</label>
+        </fieldset>
+
+        <fieldset class="controles">
+            <label>Date début aaa-mm-jj</label>
+            <input type="text" name="debut" value="{{ original.debut }}" placeholder="aaa-mm-jj" class="{{ required.debut ? 'requi' : (error.debut ? 'erreur' : '') }}">
+            <label class="message-requi">{{ required.debut }}</label>
+            <label class="message-erreur">{{ error.debut }}</label>
+        </fieldset>
+
+        <fieldset class="controles">
+            <label>Date fin aaa-mm-jj</label>
+            <input type="text" name="fin" value="{{ original.fin }}" placeholder="aaa-mm-jj" class="{{ required.fin ? 'requi' : (error.fin ? 'erreur' : '') }}">
+            <label class="message-requi">{{ required.fin }}</label>
+            <label class="message-erreur">{{ error.fin }}</label>
+        </fieldset>
+
+        <fieldset class="controles">
+            <label>Prix plancher</label>
+            <input type="number" name="prix_plancher" value="{{ original.prix_plancher }}" placeholder="votre prix plancher ici"  class="{{ required.prix_plancher ? 'requi' : (error.prix_plancher ? 'erreur' : '') }}">
+            <label class="message-requi">{{ required.prix_plancher }}</label>
+            <label class="message-erreur">{{ error.prix_plancher }}</label>
+        </fieldset>
+
+        <fieldset class="controles">
+            <label class="libeleBouton">
+                <input type="checkbox" name="est_enligne" value="1" {{ original.est_enligne ? 'checked' : '' }}>
+                Est enligne
+            </label>
+            <label class="message-erreur">{{ error.est_enligne }}</label>
+        </fieldset>
+
+        <fieldset class="controles formulaire-seulement">
+                <button class="main-action">enregistrer</button>
+                <a href="/enchere/index" class="secondary-action">mes enchére</a>
+        </fieldset>
+    </form>
+
+    <div class="mettre-ajour">
+        <a href="/enchere/modifier/{{original.id}}">modifier enchere</a>
+        <a href="/timbre/nouveau?id_enchere={{original.id}}">ajouter timbre</a>
+    </div>
+
+    {% for timbre in timbres %}
+    <h1>{{ timbre.titre }}</h1>
+    <form class="form pas-form">
+        
+        <fieldset class="controles">
+            <label>Nom de timbre</label>
+            <input value="{{ timbre.nom }}">
+        </fieldset>
+
+        <fieldset class="controles">
+            <div class="rowFlex">
+                <label class="libeleBouton">
+                    <input type="checkbox" {{ timbre.est_principal ? 'checked' : '' }}>Principal
+                </label>
+                <label class="libeleBouton">
+                    <input type="checkbox" {{ timbre.certifie ? 'checked' : '' }}>Certifié
+                </label>
+            </div>
+        </fieldset>
+
+        <fieldset class="controles">
+            <label>Tirage</label>
+            <input value="{{ timbre.tirage }}">
+        </fieldset>
+
+        <fieldset class="controles">
+            <label>Largeur</label>
+            <input value="{{ timbre.largeur }}">
+        </fieldset>
+
+        <fieldset class="controles">
+            <label>Longueur</label>
+            <input value="{{ timbre.longueur }}">
+        </fieldset>
+        
+        <fieldset class="controles">
+            <label>Etat</label>
+            <input value="{{ timbre.etat }}">
+        </fieldset>
+
+        <fieldset class="controles">
+            <label>Pays</label>
+            <input value="{{ timbre.pays }}">
+        </fieldset>
+
+        <fieldset class="rowFlex">
+            <a href="/timbre/modifier/{{ timbre.id  }}?id_enchere={{original.id}}">modifier</a>
+            <a href="/timbre/supprimer/{{ timbre.id }}?id_enchere={{original.id}}">supprimer</a>
+        </fieldset>
+
+    </form>
+    {% endfor %}
+
+</main>
+{% endblock %}

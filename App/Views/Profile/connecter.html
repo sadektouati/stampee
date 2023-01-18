@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Connecter{% endblock %}
+
+{% block body %}
+
+<main>
+    <h1>Connecter</h1>
+    <form method="post" class="form">
+            
+        <fieldset class="controles">
+            <label>Votre courriel</label>
+            <input type="text" name="courriel" value="{{ original.courriel }}" placeholder="votre courriel ici"  class="{{ required.courriel ? 'requi' : (error.courriel ? 'erreur' : '') }}">
+            <label class="message-requi">{{ required.courriel }}</label>
+            <label class="message-erreur">{{ error.courriel }}</label>
+        </fieldset>
+
+        <fieldset class="controles">
+            <label>Mot de passe</label>
+            <input type="password" name="mot_de_passe" value="{{ original.mot_de_passe }}" placeholder="chosissez un mot de passe"  class="{{ required.mot_de_passe ? 'requi' : (error.mot_de_passe ? 'erreur' : '') }}">
+            <label class="message-requi">{{ required.mot_de_passe }}</label>
+            <label class="message-erreur">{{ error.mot_de_passe }}</label>
+        </fieldset>
+
+        <fieldset class="controles">
+                <button class="main-action">connecter</button>
+                <a href="/" class="secondary-action">accueil</a>
+        </fieldset>
+    </form>
+    <div>
+        vous n'avez pa de compte! <a href="/profile/nouveau">créer nouveau compte</a>
+    </div>
+</main>
+{% endblock %}
