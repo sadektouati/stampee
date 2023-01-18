@@ -1,6 +1,6 @@
 # Welcome to the PHP MVC framework
 
-This project is part of my course. It's an online platform for Stamps' auction.
+This project is part of the course I'm following. It's an online platform for Stamps' auction.
 
 Custom CSS.
 MySQL
