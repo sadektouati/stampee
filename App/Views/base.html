@@ -23,10 +23,15 @@
         <nav>    
            <a href="/profile/index" class="button compte">profile</a>
            <a href="/favoris/index" class="button favoris">favoris</a>
-           <a href="/enchere/index" class="button notifications">mes enchéres</a>
+           <a href="/enchere/index" class="button mes-encheres">mes enchéres</a>
         </nav>
-        <form class="recherche" action="/catalogue/index">
-           <input type="text" name="recherche" placeholder="rechercher timbre">
+        <form class="recherche" id="search" action="/catalogue/index">
+            <select name="type">
+               {% for type in tableauTypeRecherche %}
+               <option value="{{ type.nom }}" {{ typeRecherche == type.nom ? 'selected' : '' }}>{{ type.nom }}</option>
+               {% endfor %}
+            </select>
+           <input type="text" name="recherche" value="{{ valeurRecherche }}" placeholder="rechercher">
            <input type="submit" value="">
         </form>
      </header>

@@ -28,14 +28,14 @@
 
         <fieldset class="controles">
             <label>Date début aaa-mm-jj</label>
-            <input type="text" name="debut" value="{{ original.debut }}" placeholder="aaa-mm-jj" class="{{ required.debut ? 'requi' : (error.debut ? 'erreur' : '') }}">
+            <input type="date" name="debut" value="{{ original.debut }}" placeholder="aaa-mm-jj" class="{{ required.debut ? 'requi' : (error.debut ? 'erreur' : '') }}" min="{{ donnees.today }}" max="{{ donnees.maxbeginday }}">
             <label class="message-requi">{{ required.debut }}</label>
             <label class="message-erreur">{{ error.debut }}</label>
         </fieldset>
 
         <fieldset class="controles">
             <label>Date fin aaa-mm-jj</label>
-            <input type="text" name="fin" value="{{ original.fin }}" placeholder="aaa-mm-jj" class="{{ required.fin ? 'requi' : (error.fin ? 'erreur' : '') }}">
+            <input type="date" name="fin" value="{{ original.fin }}" placeholder="aaa-mm-jj" class="{{ required.fin ? 'requi' : (error.fin ? 'erreur' : '') }}" min="{{ donnees.today }}"  max="{{ donnees.maxendday }}">
             <label class="message-requi">{{ required.fin }}</label>
             <label class="message-erreur">{{ error.fin }}</label>
         </fieldset>
@@ -68,22 +68,36 @@
 
     {% for timbre in timbres %}
     <h1>{{ timbre.titre }}</h1>
-    <form class="form pas-form">
+    <form class="form pas-form timbre" spellcheck="false">
+
+        <fieldset class="rowFlex">
+            <h3>{{ timbre.nom }}</h3>
+            <a href="/timbre/modifier/{{ timbre.id  }}?id_enchere={{original.id}}&section=donnees">modifier timbre</a>
+            <a href="/timbre/supprimer/{{ timbre.id }}?id_enchere={{original.id}}">supprimer timbre</a>
+        </fieldset>
+
         
-        <fieldset class="controles">
-            <label>Nom de timbre</label>
-            <input value="{{ timbre.nom }}">
+        <fieldset class="controles images">
+            {% for image in timbre.images %}
+                <picture>
+                    <a href="/timbre/supprimerimage/{{image.id}}?id_enchere={{original.id}}">X</a>
+                    <img src="{{image.fichier}}" />
+                </picture>
+            {% endfor %}
+            <picture class="rajouter-image">
+                <a href="/timbre/modifier/{{ timbre.id  }}?id_enchere={{original.id}}&section=image">ajouter images</a>
+            </picture>
+
         </fieldset>
 
         <fieldset class="controles">
-            <div class="rowFlex">
-                <label class="libeleBouton">
-                    <input type="checkbox" {{ timbre.est_principal ? 'checked' : '' }}>Principal
-                </label>
-                <label class="libeleBouton">
-                    <input type="checkbox" {{ timbre.certifie ? 'checked' : '' }}>Certifié
-                </label>
-            </div>
+            <label>Principal</label>
+            <input value="{{ timbre.est_principal ? 'oui &#10004;' : 'non &#10007;' }}">
+        </fieldset>
+
+        <fieldset class="controles">
+            <label>Certifié</label>
+            <input value="{{ timbre.certifie ? 'oui &#10004;' : 'non &#10007;' }}">
         </fieldset>
 
         <fieldset class="controles">
@@ -111,9 +125,9 @@
             <input value="{{ timbre.pays }}">
         </fieldset>
 
-        <fieldset class="rowFlex">
-            <a href="/timbre/modifier/{{ timbre.id  }}?id_enchere={{original.id}}">modifier</a>
-            <a href="/timbre/supprimer/{{ timbre.id }}?id_enchere={{original.id}}">supprimer</a>
+        <fieldset class="controles">
+            <label>Couleur</label>
+            <input value="{{ timbre.couleur }}">
         </fieldset>
 
     </form>

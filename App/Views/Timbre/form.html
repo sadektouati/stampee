@@ -7,37 +7,47 @@
 <main>
 
     <h1>{{ donnees.titre }}</h1>
-    <form method="post" class="form {{ donnees.formclass }}">
+    <form method="post" class="form {{ donnees.formclass }} {{section}}" enctype="multipart/form-data">
         <input type="hidden" name="id" value="{{original.id}}">
         <input type="hidden" name="id_enchere" value="{{original.id_enchere}}">
 
-        <fieldset class="controles">
-            <label>Images</label>
-            <label class="input-like">
-                <input type="file" name="images">
-                choisissez images
+        <fieldset class="controles upload-image">
+            <label>Image principale</label>
+            <label class="input-like {{ required.image_principale ? 'requi' : (error.image_principale ? 'erreur' : '') }}">
+                <input type="file" name="image_principale" accept="image/*">
+                choisissez image principale
             </label>
-            <label class="message-erreur">{{ error.id_pays }}</label>
+            <label class="message-requi">{{ required.image_principale }}</label>
+            <label class="message-erreur">{{ error.image_principale }}</label>
         </fieldset>
 
-        <fieldset class="controles">
+        <fieldset class="controles upload-image">
+            <label>Images</label>
+            <label class="input-like">
+                <input type="file" name="images[]" multiple accept="image/*">
+                choisissez images
+            </label>
+            <label class="message-erreur">{{ error.images }}</label>
+        </fieldset>
+
+        <fieldset class="controles donnees">
             <label>Nom de timbre</label>
             <input type="text" name="nom" value="{{ original.nom }}" placeholder="nom descriptif" class="{{ required.nom ? 'requi' : (error.nom ? 'erreur' : '') }}">
             <label class="message-requi">{{ required.nom }}</label>
             <label class="message-erreur">{{ error.nom }}</label>
         </fieldset>
 
-        <fieldset class="controles">
-            <label>Date de création fin aaa-mm-jj</label>
-            <input type="text" name="date_de_creation" value="{{ original.date_de_creation }}" placeholder="aaa-mm-jj" class="{{ required.date_de_creation ? 'requi' : (error.date_de_creation ? 'erreur' : '') }}">
+        <fieldset class="controles donnees">
+            <label>Date de création fin</label>
+            <input type="number" name="date_de_creation" value="{{ original.date_de_creation }}" placeholder="aaa" class="{{ required.date_de_creation ? 'requi' : (error.date_de_creation ? 'erreur' : '') }}">
             <label class="message-requi">{{ required.date_de_creation }}</label>
             <label class="message-erreur">{{ error.date_de_creation }}</label>
         </fieldset>
 
-        <fieldset class="controles">
+        <fieldset class="controles donnees">
             <div class="rowFlex">
-                <label class="libeleBouton">
-                    <input type="checkbox" name="principal" value="1" {{ original.est_principal ? 'checked' : '' }}>Principal
+                <label class="libeleBouton {{original.pas_possible_est_principal ? 'pas-possible' : ''}}">
+                    <input type="checkbox" name="est_principal" value="1" {{ original.est_principal ? 'checked' : '' }} {{original.pas_possible_est_principal ? 'disabled' : ''}}>Principal
                 </label>
                 <label class="libeleBouton">
                     <input type="checkbox" name="certifie" value="1" {{ original.certifie ? 'checked' : '' }}>Certifié
@@ -47,28 +57,28 @@
             <label class="message-erreur">{{ error.certifie }}</label>
         </fieldset>
 
-        <fieldset class="controles">
+        <fieldset class="controles donnees">
             <label>Tirage</label>
-            <input type="number" name="tirage" value="{{ original.tirage }}" placeholder="tirage" class="{{ required.tirage ? 'requi' : (error.tirage ? 'erreur' : '') }}">
+            <input type="number" min="0" max="9999999" name="tirage" value="{{ original.tirage }}" placeholder="tirage" class="{{ required.tirage ? 'requi' : (error.tirage ? 'erreur' : '') }}">
             <label class="message-requi">{{ required.tirage }}</label>
             <label class="message-erreur">{{ error.tirage }}</label>
         </fieldset>
 
-        <fieldset class="controles">
+        <fieldset class="controles donnees">
             <label>Largeur</label>
-            <input type="number" name="largeur" value="{{ original.largeur }}" placeholder="largeur" class="{{ required.largeur ? 'requi' : (error.largeur ? 'erreur' : '') }}">
+            <input type="number" min="5" max="50" name="largeur" value="{{ original.largeur }}" placeholder="largeur" class="{{ required.largeur ? 'requi' : (error.largeur ? 'erreur' : '') }}">
             <label class="message-requi">{{ required.largeur }}</label>
             <label class="message-erreur">{{ error.largeur }}</label>
         </fieldset>
 
-        <fieldset class="controles">
+        <fieldset class="controles donnees">
             <label>Longueur</label>
-            <input type="number" name="longueur" value="{{ original.longueur }}" placeholder="longueur" class="{{ required.longueur ? 'requi' : (error.longueur ? 'erreur' : '') }}">
+            <input type="number" min="5" max="50" name="longueur" value="{{ original.longueur }}" placeholder="longueur" class="{{ required.longueur ? 'requi' : (error.longueur ? 'erreur' : '') }}">
             <label class="message-requi">{{ required.longueur }}</label>
             <label class="message-erreur">{{ error.longueur }}</label>
         </fieldset>
         
-        <fieldset class="controles">
+        <fieldset class="controles donnees">
             <label>Etat</label>
             <select name="id_etat" value="{{ original.id_etat }}" class="{{ required.id_etat ? 'requi' : (error.id_etat ? 'erreur' : '') }}">
                 <option selected disabled value="">chosissez un état</option>
@@ -80,7 +90,7 @@
             <label class="message-erreur">{{ error.id_etat }}</label>
         </fieldset>
 
-        <fieldset class="controles">
+        <fieldset class="controles donnees">
             <label>Pays</label>
             <select name="id_pays" value="{{ original.id_pays }}" class="{{ required.id_pays ? 'requi' : (error.id_pays ? 'erreur' : '') }}">
                 <option selected disabled value="">chosissez un pays</option>
@@ -92,8 +102,20 @@
             <label class="message-erreur">{{ error.id_pays }}</label>
         </fieldset>
 
+        <fieldset class="controles donnees">
+            <label>Couleur</label>
+            <select name="id_couleur" value="{{ original.id_couleur }}" class="{{ required.id_couleur ? 'requi' : (error.id_couleur ? 'erreur' : '') }}">
+                <option selected disabled value="">chosissez une couleur</option>
+                {% for couleur in listecouleurs %}
+                <option {{ original.id_couleur == couleur.id ? 'selected' : '' }} value="{{ couleur.id }}">{{ couleur.nom }}</option>
+                {% endfor %}
+            </select>
+            <label class="message-requi">{{ required.id_couleur }}</label>
+            <label class="message-erreur">{{ error.id_couleur }}</label>
+        </fieldset>
+
         <fieldset class="controles formulaire-seulement">
-            <button class="main-action">créer timbre</button>
+            <button class="main-action">envoyer</button>
             <a href="/enchere/index" class="secondary-action">retour</a>
         </fieldset>
 

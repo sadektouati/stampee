@@ -3,6 +3,9 @@
 namespace App\Controllers;
 
 use \Core\View;
+use \App\Models;
+use \App;
+
 
 /**
  * Home controller
@@ -11,11 +14,8 @@ use \Core\View;
  */
 class Profile extends \Core\Controller
 {
+    use \App\Valider;
 
-    private $original = [];
-    private $error = [];
-    private $required = [];
-    private $donnees = [];
     /**
      * Show the index page
      *
@@ -23,11 +23,9 @@ class Profile extends \Core\Controller
      */
     public function indexAction()
     {
-        if(empty($_SESSION['id'])){
-            header('location: /profile/connecter');
-            exit;
-        }
-        $utilisateur = \App\Models\Profile::getProfile();
+        $this->doitSauthentifier();
+
+        $utilisateur = Models\Profile::getProfile();
         $this->chargerDonneesApplication(['titre' => 'mon profile', 'formclass' => 'pas-form']);
 
         View::renderTemplate('Profile/index.html', ['donnees' => $this->donnees, 'original' => $utilisateur]);
@@ -41,10 +39,7 @@ class Profile extends \Core\Controller
      */
     public function modifierAction()
     {
-        if(empty($_SESSION['id'])){
-            header('location: /profile/connecter');
-            exit;
-        }
+        $this->doitSauthentifier();
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
            
@@ -55,7 +50,7 @@ class Profile extends \Core\Controller
 
             if(empty($this->required) and empty($this->error)){
 
-                $mettreAjour = \App\Models\Profile::update([$_POST['nom'], $_POST['courriel'], $_SESSION['id']]);
+                $mettreAjour = Models\Profile::update([$_POST['nom'], $_POST['courriel'], $_SESSION['id']]);
                 if($mettreAjour == false){
                     $this->error['courriel'] = "courriel deja utilisé";
                 }else{
@@ -80,10 +75,7 @@ class Profile extends \Core\Controller
      */
     public function nouveauAction()
     {
-        if(empty($_SESSION['id']) == false){
-            header('location: /profile/index');
-            exit;
-        }
+        $this->estAuthentifie();
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
            
@@ -94,7 +86,7 @@ class Profile extends \Core\Controller
 
             if(empty($this->required) and empty($this->error)){
                     $motDePasseChifré = password_hash($_POST['mot_de_passe'], PASSWORD_DEFAULT);
-                    $identifiant = \App\Models\Profile::insert([$_POST['nom'], $motDePasseChifré, $_POST['courriel']]);
+                    $identifiant = Models\Profile::insert([$_POST['nom'], $motDePasseChifré, $_POST['courriel']]);
                     if($identifiant == false){
                         $this->error['courriel'] = "courriel deja utilisé";
                     }else{
@@ -120,20 +112,17 @@ class Profile extends \Core\Controller
      */
     public function connecterAction()
     {
-        if(empty($_SESSION['id']) == false){
-            header('location: /profile/index');
-            exit;
-        }
+        $this->estAuthentifie();
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
-           
+            
             $this->validerChampsNonVide(['courriel', 'mot_de_passe']);
             $this->validerCouriel();
 
             
             if(empty($this->required) and empty($this->error)){
                 
-                $utilisateur = \App\Models\Profile::getOne([$_POST['courriel']]);
+                $utilisateur = Models\Profile::getOne([$_POST['courriel']]);
                 if($utilisateur == false or password_verify($_POST['mot_de_passe'], $utilisateur['mot_de_passe']) == false){
                     $this->error['courriel'] = "courriel ou mot de passe érroné";
                 }else{
@@ -160,67 +149,5 @@ class Profile extends \Core\Controller
             session_destroy();
             header('location: /');
             exit;
-    }
-
-    private function validerChampsNonVide($array = ['nom', 'courriel', 'mot_de_passe']){
-        foreach ($array as $key) {
-            if(isset($this->required[$key])){continue;}
-
-            if(empty($_POST[$key])){
-                $this->required[$key] = 'le ' . str_replace('_', ' ', $key) .' est requis svp';
-            }
-        }
-    }
-
-    private function chargerDonneesApplication($array){
-        foreach ($array as $key => $value) {
-            $this->donnees[$key] = $value;
-        }
-    }
-
-    private function chargerDonneesUtilisateur($session = false){
-        if($session and empty($_POST)){
-            foreach ($_SESSION as $key => $value) {
-                $this->original[$key] = $value;
-            }
-        }else{
-            foreach ($_POST as $key => $value) {
-                $this->original[$key] = $value;
-            }
-        }
-    }
-
-    private function validerNom(){
-        if (empty($this->required['nom']) and !preg_match("/^[\D ]{3,}$/",$_POST['nom'])) {
-            $this->error['nom'] = "Seuls des lettres et des espace svp (trois ou plus)";
-        }
-        if (empty($this->required['nom']) and mb_strlen($_POST['nom'])>50) {
-            $this->error['nom'] = "Maximum 50 lettres est espaces svp";
-        }
-    }
-
-    private function validerMotDePasse(){
-        if ( empty($this->required['mot_de_passe']) ){
-            if(mb_strlen($_POST['mot_de_passe']) < 8 ) {
-                $this->error['mot_de_passe'] = "Mot de passe invalide";
-            }elseif(empty($this->required['confirmation']) and $_POST['mot_de_passe'] != $_POST['confirmation']){
-                $this->error['confirmation'] = "Mot de passes différents";
-            }
-        }
-    }
-
-    private function validerCouriel(){
-        if (empty($this->required['courriel']) and !filter_var($_POST['courriel'], FILTER_VALIDATE_EMAIL)) {
-            $this->error['courriel'] = "Couriel invalide";
-        }
-    }
-
-
-    private function chargerSessionUtilisateur($id, $nom, $courriel){
-        $_SESSION['id'] = $id;
-        $_SESSION['nom'] = $nom;
-        $_SESSION['courriel'] = $courriel;
-        header('location: /profile/index');
-        exit;
     }
 }

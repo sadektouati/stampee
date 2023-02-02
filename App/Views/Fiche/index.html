@@ -1,185 +1,179 @@
 {% extends "base.html" %}
 
-{% block title %}Fiche timbre{% endblock %}
+{% block title %}Fiche: {{ donnees.titre }} {% endblock %}
 
 {% block body %}
 
+{% if enchere %}
 <main class="fiche-enchere">
    <section class="timbres-image">
-      <span class="coup-coeur"></span>
+      <span class="{{ enchere.a_coup_de_coeur_lord ? 'coup-coeur' : '' }}"></span>
       <div class="image-courante">
          <input type="checkbox" id="zoom">
          <picture>
-            <img src="/images/stamp-1.png"  alt="un timbre precieux">
+            <img
+            {% if enchere.image_principale %}
+               src="{{enchere.image_principale}}"
+            {% else %}
+               src="https://picsum.photos/200?random={{ random() }}"
+            {% endif %}
+            alt="{{ enchere.titre_timbre_principal }}"
+            >
          </picture>
          <label for="zoom" class="libele-zoom"></label>
          <label for="zoom" class="libele-zoom"></label>
          <span class="certifie"></span>
       </div>
       <footer class="scrollable">
-         <img src="/images/stamp-1.png" alt="un timbre precieux" class="selectionee">
-         <img src="/images/stamp-2.png" alt="un timbre rare">
-         <img src="/images/stamp-3.png" alt="un timbre pas chere">
-         <img src="/images/stamp-4.png" alt="timbre de collection">
-         <img src="/images/stamp-5.png" alt="un timbre royal">
+         {% for image in images %}
+            <img src="{{ image.fichier }}" alt="{{ image.nom_timbre }}" class="{{ image.est_principal ? 'selectionee' : '' }}">
+         {% else %}
+            {% for i in 1..5 %}
+               <img src="https://picsum.photos/200?random={{ random() }}" class="{{ i==1 ? 'selectionee' : '' }}">
+            {% endfor %}
+         {% endfor %}
       </footer>
    </section>
    <section class="enchere-description">
       <div class="dates">
-         <b>09 Juil. 2022</b>
+         <b>{{ enchere.debut }}</b>
          <span>à</span>
-         <b>25 Juil. 2022</b>
+         <b>{{ enchere.fin }}</b>
       </div>
       <article class="prix">
          <div>
             <span>prix plancher:</span>
-            <em>5 000</em> <sub>CAD</sub>
+            <em>{{ enchere.prix_plancher }}</em> <sub>CAD</sub>
          </div>
-         <div>
+         <!-- <div>
             <span>éstimation:</span>
             <em>8 000 à 30 000</em><sub>CAD</sub>
-         </div>
+         </div> -->
          <footer>
             <span>Derniére mise</span>
-            <div><b>18 200</b> <sub>CAD</sub></div>
+            <div><b>{{ enchere.offre_actuel ?? '-' }}</b> <sub>CAD</sub></div>
          </footer>
       </article>
       <footer>
-         <a href="#" class="cta-principal placer-mise">
-         placer mise
-         </a>
-         <a href="#" class="cta-secondaire ajouter-favoris">ajouter favoris</a>
-         <span class="almost-late">il reste 28 heures</span>
+         {% if enchere.peut_rajouter %}
+            {% if donnees.connecte %}
+            <label class="cta-principal placer-mise" for="mise">
+               {% if enchere.mise %}
+                  misé ({{ enchere.mise }} cad) &#10004;
+               {% else %}
+                  placer mise
+               {% endif %}
+            </label>
+         
+            {% if enchere.est_favoris %}
+            <a href="/favoris/index" class="cta-secondaire ajouter-favoris">déja favoris &#10004;</a>
+            {% else %}
+            <a href="/favoris/ajouter/{{ enchere.id }}" class="cta-secondaire ajouter-favoris">ajouter favoris</a>
+            {% endif %}
+
+            {% if enchere.heures_restantes %}
+            <span class="almost-late">il reste {{ enchere.heures_restantes }} heures</span>
+            {% endif %}
+            
+            <input type="checkbox" id="mise" {{ required.mise ? 'checked' : '' }} {{ error.mise  ? 'checked' : '' }}>
+            <form class="form placer-mise-form" action="/fiche/placermise/{{ enchere.id }}" method="post">
+               <fieldset class="controles">
+                  <label>Entrer la mise en cad svp</label>
+                  <input type="number" name="mise" value="{{ original.mise }}" placeholder="votre offre içi" class="{{ required.mise ? 'requi' : (error.mise ? 'erreur' : '') }}" min="{{ enchere.offre_actuel }}">
+                  <span class="message-requi">{{required.mise}}</span>
+                  <span class="message-erreur">{{error.mise}}</span>
+               </fieldset>
+               <fieldset class="controles formulaire-seulement">
+                  <button class="main-action">enregistrer</button>
+                  <label class="secondary-action" for="mise">annuler</label>
+               </fieldset>
+            </form>
+            {% else %}
+            <a href="/profile/connecter" class="cta-principal placer-mise">placer mise</a>
+            <a href="/profile/connecter" class="cta-secondaire ajouter-favoris">ajouter favoris</a>
+            {% endif %}
+
+         {% else %}
+         <label class="cta-principal placer-mise disabled">mise</label>
+         <a class="cta-secondaire ajouter-favoris disabled">ajouter favoris</a>
+         {% endif %}
+
       </footer>
       <article class="mises">
          <header>
-            25 mises (5 aujourd'hui)
+            {{ enchere.compte_mises }} mises (1 aujourd'hui)
          </header>
+         {% if mises %}
          <input type="checkbox" id="tous-mise">
          <ul>
+            {% for mise in mises %}
             <li>
-               <span>Mohammed Bourahla</span> 17 900 cad
+               <span>{{ mise.nom }}</span> {{ mise.valeur }} cad
             </li>
-            <li>
-               <span>anonyme</span> 17 500 cad
-            </li>
-            <li>
-               <span>anonyme</span>  17 250 cad
-            </li>
-            <li>
-               <span>Gauthier Morin</span>  17 100 cad
-            </li>
-            <li>
-               <span>anonyme</span>  16 500 cad
-            </li>
+            {% endfor %}
          </ul>
          <label for="tous-mise" class="aficacher">afficher les autres</label>
          <label for="tous-mise" class="aficacher">cacher</label>
+         {% endif %}
+
+      </article>
+      <article class="commentaire-enchere">
+         <header>
+            {{ enchere.titre }}
+         </header>
+         <p>
+            {{ enchere.commentaire }}
+         </p>
       </article>
    </section>
    <section class="timbre-description">
-      <header>
-         Postal History of the World
-      </header>
-      <p>
-         Lot 27 - 1869 15c brown & blue, Type II, center inverted, lightly canceled, tiny thin at bottom right, small horizontal crease at bottom left, with two PFCs no longer accompanying, ex 2010 Siegel Rarities of the World, Sale 989 ($10,500 hammer) (PFC No. 125146 - "small horizontal crease top left and thin bottom right";
-      </p>
-      <p>
-         PFC No.488607 - "tiny corner thin bottom right, small horizontal crease top left") (Siegel Census records three unused and 102 used copies, of which approximately only 15 are sound, includ
-      </p>
+      
+      {% for timbre in timbres %}
       <table>
          <tr>
-            <td>Créé le:</td>
-            <td>05 juil. 1865</td>
+            <th colspan="2">{{ loop.index }} - {{ timbre.nom }}</th>
+         </tr>
+         <tr>
+            <td>Créé en:</td>
+            <th>{{ timbre.date_de_creation }}</th>
          </tr>
          <tr>
             <td>Couleur(s):</td>
-            <td>blue rouge jaune</td>
+            <th>{{ timbre.couleur }}</th>
          </tr>
          <tr>
             <td>Pays d'origine:</td>
-            <td>Canada</td>
+            <th>{{ timbre.pays }}</th>
          </tr>
          <tr>
-            <td>Condition:</td>
-            <td>Bonne</td>
+            <td>Etat:</td>
+            <th>{{ timbre.etat }}</th>
          </tr>
          <tr>
             <td>Tirage:</td>
-            <td>25</td>
+            <th>{{ timbre.tirage }}</th>
          </tr>
          <tr>
             <td>Dimensions:</td>
-            <td>5cm / 7cm</td>
+            <th>{{ timbre.largeur }} / {{ timbre.longueur }}</th>
          </tr>
       </table>
+      {% endfor %}
    </section>
+   {% else %}
+   <h2>Enchère hors ligne</h2>
+   {% endif %}   
 </main>
+
 <article>
-   <h2>Encheres pertinents</h2>
+   {% if encheres %}
+   <h2>Encheres pertinentes</h2>
    <section class="grille">
-      <article>
-         <span class="coup-coeur"></span>
-         <img src="/images/stamp-1.png"  alt="un timbre simple">
-         <div>
-            <h3>
-               independence heros
-            </h3>
-            <span>
-            Est. 400 - 500 cad
-            </span>
-            <span>
-            dans 1 jour
-            </span>
-            <p>
-               saepe excepturi hic, inventore at asperiores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
-            </p>
-            <footer>
-               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
-            </footer>
-         </div>
-      </article>
-      <article>
-         <img src="/images/stamp-2.png"  alt="un timbre precieux">
-         <div>
-            <h3>
-               Lead the movement
-            </h3>
-            <span>
-            Est. 100 - 350 cad
-            </span>
-            <span>
-            en cours 100 cad
-            </span>
-            <p>
-               mollitia praesentium minus veritatis delectus at asperiores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
-            </p>
-            <footer>
-               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
-            </footer>
-         </div>
-      </article>
-      <article>
-         <img src="/images/stamp-3.png"  alt="un timbre historique">
-         <div>
-            <h3>
-               new era
-            </h3>
-            <span>
-            Est. 400 - 500 cad
-            </span>
-            <span>
-            en cours 425 cad
-            </span>
-            <p>
-               Porro saepe excepturi hic, inventore mollitia praesentium minus veritatis delectus at asperiores? Voluptas, alias assumenda. Voluptatem quis amet a ratione ad maxime.
-            </p>
-            <footer>
-               <a href="/fiche/index/1" class="cta-secondaire">placer mise</a>
-            </footer>
-         </div>
-      </article>
+      {% include 'Partials/carteenchere.html' %}
    </section>
+   {% else %}
+   <h2>Aucune enchère pertinente</h2>
+   {% endif %}
 </article>
 
 {% endblock %}

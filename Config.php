@@ -20,22 +20,19 @@ class Config
      * Database name
      * @var string
      */
-    // const DB_NAME = 'stampe_saddek';
-    const DB_NAME = 'e2195836';
+    const DB_NAME = 'stampe_saddek';
 
     /**
      * Database user
      * @var string
      */
-    // const DB_USER = 'root';
-    const DB_USER = 'e2195836';
+    const DB_USER = 'root';
 
     /**
      * Database password
      * @var string
      */
-    //const DB_PASSWORD = '';
-    const DB_PASSWORD = 'uxayS8h0bQv15fE6bwB2';
+    const DB_PASSWORD = '';
 
     /**
      * Show or hide error messages on screen

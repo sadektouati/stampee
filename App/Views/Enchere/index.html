@@ -11,7 +11,7 @@
     {% for enchere in encheres %}
         <article>
            <span class="{{ enchere.a_coup_de_coeur_lord ? 'coup-coeur' : '' }}"></span>
-           <img src="/images/{{enchere.fichier}}" alt="{{enchere.titre}}">
+           <img src="{{enchere.fichier}}" alt="{{enchere.titre}}">
            <div>
               <h3>{{enchere.titre}}</h3>
               <span>

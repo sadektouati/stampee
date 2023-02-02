@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 /**
  * Front controller
  *
@@ -29,21 +30,5 @@ $router = new Core\Router();
 $router->add('', ['controller' => 'Home', 'action' => 'index']);
 $router->add('{controller}/{action}');
 $router->add('{controller}/{action}/{id:\d+}');
-$router->add('catalogue/index/:id/');
-$router->add('fiche/index/:id/');
-
-$router->add('profile/index');
-$router->add('profile/nouveau');
-$router->add('profile/modifier');
-$router->add('profile/connecter');
-$router->add('profile/deconnecter');
-
-$router->add('enchere/index');
-$router->add('enchere/nouveau');
-$router->add('enchere/modifier/:id');
-$router->add('enchere/details/:id');
-
-$router->add('timbre/nouveau');
-$router->add('timbre/modifier/:id');
 
 $router->dispatch($_SERVER['QUERY_STRING']);

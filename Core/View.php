@@ -46,6 +46,9 @@ class View
             $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/App/Views');
             $twig = new \Twig\Environment($loader);
         }
+        $args['tableauTypeRecherche'] = [['nom' => 'tous'], ['nom' => 'enchere'], ['nom' => 'timbre']];
+        $args['typeRecherche'] = $_GET['type']??null;
+        $args['valeurRecherche'] = $_GET['recherche']??null;
         echo $twig->render($template, $args);
     }
 }

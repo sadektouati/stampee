@@ -11,14 +11,28 @@ use \Core\View;
  */
 class Home extends \Core\Controller
 {
+    use \App\Valider;
 
     /**
+     * load Live auctions
      * Show the index page
      *
      * @return void
      */
     public function indexAction()
     {
-        View::renderTemplate('Home/index.html');
+
+        $encheres = \App\Models\Home::getAllVedetteAuctions();
+        View::renderTemplate('Home/index.html', ['donnees' => $this->donnees, 'encheres' => $encheres]);
+        
     }
+
+    public function fakeAction()
+    {
+
+        \App\Models\Home::fake($_GET['quoi']??null);
+        
+    }
+
+
 }

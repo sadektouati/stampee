@@ -11,11 +11,7 @@ use \Core\View;
  */
 class Enchere extends \Core\Controller
 {
-
-    private $original = [];
-    private $error = [];
-    private $required = [];
-    private $donnees = [];
+    use \App\Valider;
 
     /**
      * Show the index page
@@ -24,12 +20,8 @@ class Enchere extends \Core\Controller
      */
     public function indexAction()
     {
-        if(empty($_SESSION['id'])){
-            header('location: /profile/connecter');
-            exit;
-        }
-
-        $encheres = \App\Models\Enchere::getAll();
+        $this->doitSauthentifier();
+        $encheres = \App\Models\Enchere::getAll([$_SESSION['id']]);
         $this->chargerDonneesApplication(['titre' => 'Mes encheres']);
 
         View::renderTemplate('Enchere/index.html', ['donnees' => $this->donnees, 'encheres' => $encheres]);
@@ -43,18 +35,18 @@ class Enchere extends \Core\Controller
      */
     public function detailsAction($modifier = false, $donneesLive = false)
     {
-        if(empty($_SESSION['id'])){
-            header('location: /profile/connecter');
-            exit;
-        }
+        $this->doitSauthentifier();
 
         $timbres = [];
         if($donneesLive){
             $this->chargerDonneesUtilisateur();
         }else{
-            $idEnchere = $this->route_params['id']??null ;
+            $idEnchere = $this->route_params['id']??null;
             $this->original = \App\Models\Enchere::getOne($idEnchere);
             $timbres = \App\Models\Enchere::getAllStamps([$_SESSION['id'], $idEnchere]);
+            foreach($timbres as $k => $timbre){
+                $timbres[$k]['images'] = \App\Models\Enchere::getAllStampImages([$timbre['id']]);
+            }
         }
         $this->chargerDonneesApplication(['titre' => $this->original['titre']??'nouvelle enchere', 'formclass' => $modifier ? '' : 'pas-form']);
 
@@ -78,10 +70,7 @@ class Enchere extends \Core\Controller
      */
     public function modifierAction()
     {
-        if(empty($_SESSION['id'])){
-            header('location: /profile/connecter');
-            exit;
-        }
+        $this->doitSauthentifier();
 
         $modifier = true;
         $donneesLive = false;
@@ -91,6 +80,7 @@ class Enchere extends \Core\Controller
             $donneesLive = true;
             $this->validerChampsNonVide(['debut', 'fin', 'prix_plancher']);
             $this->validerDate(['debut', 'fin']);
+            $this->validerIntervalDateFuture(['debut', 'fin']);
             $this->validerPrix(['prix_plancher']);
             $this->validerText(['titre', 'commentaire']);
 
@@ -112,66 +102,11 @@ class Enchere extends \Core\Controller
             $this->chargerDonneesApplication(['titre' => 'novelle enchere']);
         }
 
+        $aujourdHui = new \Datetime();
+        $this->donnees['today'] = $aujourdHui->format('Y-m-d');
+        $this->donnees['maxbeginday'] = $aujourdHui->modify('+6 months')->format('Y-m-d');
+        $this->donnees['maxendday'] = $aujourdHui->modify('+12 months')->format('Y-m-d');
         $this->detailsAction($modifier, $donneesLive);
-    }
-
-    private function validerChampsNonVide($array = []){
-        foreach ($array as $value) {
-            if(empty($_POST[$value])){
-                $this->required[$value] = 'le ' . str_replace('_', ' ', $value) .' est requis svp';
-            }
-        }
-    }
-
-    private function chargerDonneesApplication($array){
-        foreach ($array as $key => $value) {
-            $this->donnees[$key] = $value;
-        }
-    }
-
-    private function chargerDonneesUtilisateur($session = false){
-        if($session and empty($_POST)){
-            foreach ($_SESSION as $key => $value) {
-                $this->original[$key] = $value;
-            }
-        }else{
-            foreach ($_POST as $key => $value) {
-                $this->original[$key] = $value;
-            }
-        }
-    }
-
-    private function validerDate($array){
-        foreach ($array as $key) {
-            if(isset($this->required[$key])){continue;}
-
-            $dateArray = explode('-', $_POST[$key]);
-            if(count($dateArray) != 3){
-                $this->error[$key] = 'le format de la date est uncorrect.';
-            }elseif(checkdate((int)$dateArray[1], (int)$dateArray[2], (int)$dateArray[0]) == false){
-                $this->error[$key] = 'la date ' . $key . ' n est pas une date correcte.';
-            }
-        }
-    }
-
-    private function validerPrix($array){
-        foreach ($array as $key) {
-            if(isset($this->required[$key])){continue;}
-
-            if(is_numeric($_POST[$key]) == false or $_POST[$key] < 0 or $_POST[$key] > 10000000){
-                $this->error[$key] = 'Le prix doit être numeric et entre 0 et 10000000';
-            }
-        }
-    }
-    private function validerText($array){
-        
-        foreach ($array as $key) {
-            if(isset($this->required[$key])){continue;}
-
-            if(mb_strlen($_POST[$key]??'') < 10){
-                $this->error[$key] = 'Au moins dix characteres';
-            }
-        }
     }
 
 }

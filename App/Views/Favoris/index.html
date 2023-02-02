@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{donnees.titre}}{% endblock %}
+
+{% block body %}
+
+<main>
+<h1>{{donnees.titre}}</h1>
+
+<section class="grille">
+    {% for favoris in favoriss %}
+        <article>
+           <span class="{{ favoris.a_coup_de_coeur_lord ? 'coup-coeur' : '' }}"></span>
+           <img src="/images/{{favoris.fichier}}" alt="{{favoris.titre}}">
+           <div>
+              <h3>{{favoris.titre}}</h3>
+              <span>
+                Est. 400 - 500 cad
+              </span>
+              <span>en cours {{ favoris.offre_actuel ? favoris.offre_actuel : '--' }} cad</span>
+              <p>
+                {{favoris.commentaire}}
+              </p>
+              <footer>
+                <a href="/favoris/details/{{favoris.id}}" class="cta-secondaire">détails</a>
+             </footer>
+           </div>
+        </article>
+        {% endfor %}
+    </section>
+
+<article>
+    <footer>
+        <a href="/catalogue/index" class="cta-secondaire">trouver favoris</a>
+    </footer>
+</article>
+</main>
+
+{% endblock %}
